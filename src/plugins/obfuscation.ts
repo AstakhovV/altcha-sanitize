@@ -1,5 +1,6 @@
 import { Plugin } from '../plugin';
 import { State, type PluginContext } from '../types';
+import sanitizeHtml from 'sanitize-html';
 
 /**
  * PluginObfuscation is a plugin designed to clarify obfuscated data, such as email addresses or phone numbers.
@@ -138,7 +139,7 @@ export class PluginObfuscation extends Plugin {
         .split('?');
       el = document.createElement('a');
       el.href = clearText;
-      el.innerHTML = contact;
+      el.innerHTML = sanitizeHtml(contact);
     } else {
       // Otherwise, create a text node with the clear text
       el = document.createTextNode(clearText);

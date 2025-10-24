@@ -52,6 +52,7 @@
 
 <script lang="ts">
   import { onDestroy, onMount, tick } from 'svelte';
+  import sanitizeHtml from 'sanitize-html';
   import {
     solveChallenge,
     createTestChallenge,
@@ -202,6 +203,10 @@
   let loadedPlugins: Plugin[] = [];
   let playCodeChallengeAudio: boolean = $state(false);
   let payload: string | null = $state(null);
+
+  function safeHtml(html: string): string {
+    return sanitizeHtml(html);
+  }
 
   $effect(() => {
     onErrorChangeHandler(error);
@@ -1600,13 +1605,13 @@
       for={widgetId}
     >
       {#if currentState === State.VERIFIED}
-        {@html _strings.verified}
+        {@html safeHtml(_strings.verified)}
       {:else if currentState === State.VERIFYING}
-        {@html _strings.verifying}
+        {@html safeHtml(_strings.verifying)}
       {:else if currentState === State.CODE}
-        {@html _strings.verificationRequired}
+        {@html safeHtml(_strings.verificationRequired)}
       {:else}
-        {@html _strings.label}
+        {@html safeHtml(_strings.label)}
       {/if}
     </label>
 
@@ -1775,16 +1780,16 @@
         />
       </svg>
       {#if currentState === State.EXPIRED}
-        <div title={error}>{@html _strings.expired}</div>
+        <div title={error}>{@html safeHtml(_strings.expired)}</div>
       {:else}
-        <div title={error}>{@html _strings.error}</div>
+        <div title={error}>{@html safeHtml(_strings.error)}</div>
       {/if}
     </div>
   {/if}
 
   {#if _strings.footer && (hidefooter !== true || isFreeSaaS)}
     <div class="altcha-footer">
-      <div>{@html _strings.footer}</div>
+      <div>{@html safeHtml(_strings.footer)}</div>
     </div>
   {/if}
 
